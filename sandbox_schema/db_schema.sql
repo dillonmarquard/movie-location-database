@@ -1,4 +1,4 @@
-create table if not exists Movie (
+create table if not exists Movies (
     id TEXT primary key not null, -- from imdb
     studio_id INTEGER not null,
     title TEXT not null,
