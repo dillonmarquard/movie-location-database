@@ -1,9 +1,9 @@
 create table Movies (
-    id TEXT unique not null, -- from imdb
+    id INTEGER primary key autoincrement, -- from imdb
     studio_id INTEGER not null,
     title TEXT not null,
     year INTEGER not null,
-    primary key (title,year)
+    unique (title,year)
 );
 
 create table Studios (

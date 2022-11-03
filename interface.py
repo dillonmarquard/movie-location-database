@@ -63,7 +63,7 @@ class interface:
             print(er)
             print("ERROR: load_data")
 
-    ### Get id
+    ### Fetch Primary Key / Insert into Table
     def get_studio_id(self,_name):
         res = self._cur.execute("""select id from Studios where name = ?""",[_name])
         tmp = res.fetchall()
@@ -77,7 +77,7 @@ class interface:
         res = self._cur.execute("""select id from Movies where title = ? and year = ?""",[_title,_year])
         tmp = res.fetchall()
         if len(tmp) == 0:
-            return None
+            return None # can't infer movie studio
         else:
             return tmp[0][0]
 
@@ -99,20 +99,34 @@ class interface:
         else:
             return tmp[0][0]
 
-    ### Add row
-    def add_studio(self,_name):
-        self._cur.execute("""insert into Studios (name) values (?)""",[_name])
+    def get_location_id(self,_address):
+        res = self._cur.execute("""select id from Locations where address = ?""",[_address])
+        tmp = res.fetchall()
+        if len(tmp) == 0:
+            self.add_location(_address)
+            return self.get_location_id(_address)
+        else:
+            return tmp[0][0]
 
-    def add_movie(self,_id, _title, _year, _studio):
+    ### Insert into core tables
+    def add_studio(self,_name):
+        try:
+            self._cur.execute("""insert into Studios (name) values (?)""",[_name])
+            self._conn.commit()
+        except sqlite3.Error as er:
+            print(er)
+            print("ERROR: add_studio")
+
+    def add_movie(self, _title, _year, _studio):
         try:
             _studio_id = self.get_studio_id(_studio)
-            self._cur.execute("""insert into Movies (id, studio_id, title, year) values (?, ?, ?, ?)""",[_id,_studio_id,_title,_year])
+            self._cur.execute("""insert into Movies (studio_id, title, year) values (?, ?, ?)""",[_studio_id,_title,_year])
             self._conn.commit()
         except sqlite3.Error as er:
             print(er)
             print("ERROR: add_movie")
 
-    def add_location(self,_address,_info):
+    def add_location(self,_address,_info=None):
         try:
             self._cur.execute("""insert into Locations (address, info) values (?, ?)""",[_address,_info])
             self._conn.commit()
@@ -135,6 +149,18 @@ class interface:
         except sqlite3.Error as er:
             print(er)
             print("ERROR: add_director")
+    
+    ### Insert Relationships
+    def add_movielocation(self,_title,_year,_address):
+        try:
+            _movie_id = self.get_movie_id(_title,_year)
+            _location_id = self.get_location_id(_address)
+            self._cur.execute("""insert into MovieLocation (movie_id, location_id) values (?, ?)""",[_movie_id, _location_id])
+            self._conn.commit()
+        except sqlite3.Error as er:
+            print(er)
+            print("ERROR: add_movielocation")
+    
     # 
     def view_collection(self):
         pass
@@ -152,7 +178,8 @@ def main():
     _fct.load_data()
     print("----------")
 
-    _fct.add_movie("tt0000001","Random movie name: the presequel",2000,"doesnt exist studios")
+    _fct.add_movie("Random movie name: the presequel",2000,"doesnt exist studios")
+    _fct.add_movielocation("Random movie name: the presequel",2000,"123 Elmo Street")
     ####################
     _fct._conn.close()
 
