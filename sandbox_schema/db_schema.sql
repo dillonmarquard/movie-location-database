@@ -1,39 +1,41 @@
 create table Movies (
-    id TEXT primary key not null, -- from imdb
+    id TEXT unique not null, -- from imdb
     studio_id INTEGER not null,
     title TEXT not null,
-    year INTEGER not null
+    year INTEGER not null,
+    primary key (title,year)
 );
 
 create table Studios (
-    id INTEGER primary key not null,
-    name TEXT not null
+    id INTEGER primary key autoincrement,
+    name TEXT unique not null
 );
 
 create table Locations (
-    id INTEGER primary key not null,
+    id INTEGER primary key autoincrement,
     address TEXT unique not null,
-    info TEXT not null
+    info TEXT
 );
 
 create table Genres (
-    id INTEGER not null,
-    name TEXT unique not null,
-    primary key (id,name)
+    id INTEGER primary key autoincrement,
+    name TEXT unique not null
 );
 
 create table Actors (
-    id INTEGER primary key not null,
+    id INTEGER primary key autoincrement,
     firstname TEXT not null,
     lastname TEXT not null,
-    born DATE not null,
-    died DATE
+    born DATE,
+    died DATE,
+    unique (firstname, lastname)
 );
 
 create table Directors (
-    id INTEGER primary key not null,
+    id INTEGER primary key autoincrement,
     firstname TEXT not null,
-    lastname TEXT not null
+    lastname TEXT not null,
+    unique (firstname, lastname)
 );
 
 create table MovieGenre (
