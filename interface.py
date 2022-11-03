@@ -4,15 +4,33 @@ import os
 
 class interface:
     def __init__(self):
-        self._db = sqlite3.connect("cse111_movie_rdb.sqlite")
-        self._cur = self._db.cursor()
+        self._conn = sqlite3.connect("cse111_movie_rdb.sqlite")
+        self._cur = self._conn.cursor()
+        self._conn.commit()
+
+    def clear_schema(self):
+        try:
+            self._cur.execute("""drop table Studios""")
+            self._cur.execute("""drop table MovieLocation""")
+            self._cur.execute("""drop table MovieGenre""")
+            self._cur.execute("""drop table MovieDirector""")
+            self._cur.execute("""drop table Movies""")
+            self._cur.execute("""drop table Locations""")
+            self._cur.execute("""drop table Genres""")
+            self._cur.execute("""drop table Directors""")
+            self._cur.execute("""drop table Actors""")
+            self._cur.execute("""drop table MovieActor""")
+            self._conn.commit()
+        except sqlite3.Error as er:
+            print(er)
+            print("ERROR: clear_schema")
 
     def load_schema(self):
         try:
             with open("sandbox_schema/db_schema.sql", 'r') as sql_file:
                 sql = sql_file.read()
             tmp = self._cur.executescript(sql)
-            self._db.commit()
+            self._conn.commit()
         except sqlite3.Error as er:
             print(er)
             print("ERROR: load_schema")
@@ -38,7 +56,9 @@ class interface:
                 self._cur.execute("""insert into Directors values (?, ?, ?)""", row[1:] )
             for row in pd.read_csv('data/Actors.csv').itertuples():
                 self._cur.execute("""insert into Actors values (?, ?, ?, ?, ?)""", row[1:] )
-            self._db.commit()
+            for row in pd.read_csv('data/MovieActor.csv').itertuples():
+                self._cur.execute("""insert into MovieActor values (?, ?)""", row[1:] )
+            self._conn.commit()
         except sqlite3.Error as er:
             print(er)
             print("ERROR: load_data")
@@ -51,9 +71,12 @@ class interface:
 
 def main():
     _fct = interface()
+    _fct.clear_schema()
+    print("----------")
     _fct.load_schema()
+    print("----------")
     _fct.load_data()
-    _fct._db.close()
+    _fct._conn.close()
 
 if __name__ == "__main__":
     main()
