@@ -194,8 +194,21 @@ class interface:
 
     # VIEWS
     def view_collection(self):
+        # view collection by (genre, director, actor, year, studio, location)
         pass
 
+    def view_collection_by_genre(self, _genre):
+        try:
+            tmp = self._cur.execute("""
+                select * 
+                from Movies
+                inner join MovieGenre on Movies.id = MovieGenre.movie_id
+                inner join Genres on MovieGenre.genre_id = Genres.id
+                where Genres.name = ?""",[_genre]).fetchall()
+            
+        except sqlite3.Error as er:
+            print(er)
+            print("ERROR: view_collection_by_genre")
     # idk
     def parse_output(self):
         pass 
@@ -212,8 +225,9 @@ def main():
     #_fct.add_movie("Random movie name: the presequel",2000,"doesnt exist studios")
     _fct.add_movielocation("Random movie name: the presequel",2000,"123 Elmo Street")
     _fct.update_movie("Random movie name: the presequel",2000,_new_year=2010)
-    _fct.update_movie("Random movie name: the presequel",2000,_new_title="adjusted title",_new_studio_name="BBC Films")
+    _fct.update_movie("Random movie name: the presequel",2010,_new_title="adjusted title",_new_studio_name="BBC Films")
     _fct.add_actor("John","Smith","1/1/2000")
+    _fct.view_collection_by_genre("Horror")
 
 if __name__ == "__main__":
     main()
