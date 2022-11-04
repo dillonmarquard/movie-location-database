@@ -167,7 +167,7 @@ class interface:
             print(er)
             print("ERROR: add_movielocation")
     
-    # UPDATE Movies
+    # UPDATE
     def update_movie(self,_title,_year,_new_title=None,_new_year=None,_new_studio_name=None):
         try:
             tmp = self._cur.execute("""select id, studio_id from Movies where title = ? and year = ?""",[_title,_year]).fetchall()
@@ -189,7 +189,10 @@ class interface:
             print(er)
             print("ERROR: update_movie")
 
-    # 
+    def update_location(self):
+        pass
+
+    # VIEWS
     def view_collection(self):
         pass
 
@@ -210,5 +213,7 @@ def main():
     _fct.add_movielocation("Random movie name: the presequel",2000,"123 Elmo Street")
     _fct.update_movie("Random movie name: the presequel",2000,_new_year=2010)
     _fct.update_movie("Random movie name: the presequel",2000,_new_title="adjusted title",_new_studio_name="BBC Films")
+    _fct.add_actor("John","Smith","1/1/2000")
+
 if __name__ == "__main__":
     main()
