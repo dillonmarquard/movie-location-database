@@ -256,6 +256,7 @@ class interface:
     def view_collection_by_yr_range(self, year_begin, year_end):
         pass
 
+    # Displays movies where all actors are still alive
     def view_collection_by_living_actor(self):
         try:
             tmp = self._cur.execute("""
