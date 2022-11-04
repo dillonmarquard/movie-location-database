@@ -209,11 +209,41 @@ class interface:
             print("ERROR: update_location")
 
     # VIEWS
-    def view_collection_by_year(self):
-        pass
+    def view_collection_by_year(self, _year):
+        try:
+            tmp = self._cur.execute("""
+                select * 
+                from Movies
+                where year = ?""",[_year]).fetchall()
+            res = "{:<32} {:>4}".format("Title","Year")
+            for row in tmp:
+                res += "\n{:<32} {:>4}".format(row[0],row[1])
+            return res
+        except sqlite3.Error as er:
+            print(er)
+            print("ERROR: view_collection_by_year")
+        
+    def view_collection_by_studio(self, _studio):
+        try:
+            tmp = self._cur.execute("""
+                select * 
+                from Movies
+                inner join Studios on Movies.studio_id = Studios.id
+                where Studios.name = ?""",[_studio]).fetchall()
+        except sqlite3.Error as er:
+            print(er)
+            print("ERROR: view_collection_by_studio")
 
-    def view_collection_by_studio(self):
-        pass
+    def view_collection_by_location(self, _location):
+        try:
+            tmp = self._cur.execute("""
+                select * 
+                from Movies
+                inner join MovieLocation on Movies.id = MovieLocation.movie_id
+                where Genres.location_id = ?""",[_location]).fetchall()
+        except sqlite3.Error as er:
+            print(er)
+            print("ERROR: view_collection_by_location")
 
     def view_collection(self):
         # view collection by (genre, director, actor, year, studio, location)
