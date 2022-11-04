@@ -114,6 +114,15 @@ class interface:
         else:
             return tmp[0][0]
 
+    def get_genre_id(self,_genre):
+        res = self._cur.execute("""select id from Genres where name = ?""",[_genre])
+        tmp = res.fetchall()
+        if len(tmp) == 0:
+            self.add_(_genre)
+            return self.get_genre_id(_genre)
+        else:
+            return tmp[0][0]
+
     ### Insert into core tables
     def add_studio(self,_name):
         try:
@@ -166,6 +175,16 @@ class interface:
         except sqlite3.Error as er:
             print(er)
             print("ERROR: add_movielocation")
+    
+    def add_moviegenre(self, _title,_year,_genre):
+        try:
+            _movie_id = self.get_movie_id(_title,_year)
+            _genre_id = self.get_genre_id(_genre)
+            self._cur.execute("""insert into MovieGenre (movie_id, genre_id) values (?, ?)""",[_movie_id, _genre_id])
+            self._conn.commit()
+        except sqlite3.Error as er:
+            print(er)
+            print("ERROR: add_moviegenre")
     
     # UPDATE
     def update_movie(self,_title,_year,_new_title=None,_new_year=None,_new_studio_name=None):
@@ -355,13 +374,16 @@ def main():
     _fct.update_movie("Random movie name: the presequel",2010,_new_title="adjusted title",_new_studio_name="BBC Films")
     _fct.add_actor("John","Smith","1/1/2000")
 
+    #print(_fct.view_collection_by_genre("Horror"))
+    #print()
+    #print(_fct.view_collection_by_director("Ridley","Scott"))
+    #print()
+    print("View Collection by Horror")
     print(_fct.view_collection_by_genre("Horror"))
+    #print(_fct.view_collection_by_actor("John","Candy"))
     print()
-    print(_fct.view_collection_by_director("Ridley","Scott"))
-    print()
-    print(_fct.view_collection_by_actor("John","Candy"))
-
-    _fct.view_collection_by_genre("Horror")
-    print(_fct.view_collection_by_living_actor())
+    _fct.add_moviegenre("Dear John", 2010, "Horror")
+    print(_fct.view_collection_by_genre("Horror"))
+    #print(_fct.view_collection_by_living_actor())
 if __name__ == "__main__":
     main()
