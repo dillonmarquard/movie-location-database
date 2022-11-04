@@ -3,7 +3,7 @@
 ## Movie Archive DB
 ### Primary Interface
 add_movie(imdb_id, title, year, studio_name)  
-add_movielocation(title,year,address) not implemented  
+add_movielocation(title,year,address) 
   
 ### Utility Functions
 add_location()  
