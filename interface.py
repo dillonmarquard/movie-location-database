@@ -209,6 +209,12 @@ class interface:
             print("ERROR: update_location")
 
     # VIEWS
+    def view_collection_by_year(self):
+        pass
+
+    def view_collection_by_studio(self):
+        pass
+
     def view_collection(self):
         pass
 
