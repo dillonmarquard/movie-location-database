@@ -234,6 +234,38 @@ class interface:
         except sqlite3.Error as er:
             print(er)
             print("ERROR: view_collection_by_genre")
+
+    def view_collection_by_director(self, _firstname, _lastname):
+        try:
+            tmp = self._cur.execute("""
+                select Movies.title, Movies.year
+                from Movies
+                inner join MovieDirector on Movies.id = MovieDirector.movie_id
+                inner join Directors on MovieDirector.director_id = Directors.id
+                where Directors.firstname = ? and Directors.lastname = ?""",[_firstname, _lastname]).fetchall()
+            res = "{:<32} {:>4}".format("Title","Year")
+            for row in tmp:
+                res += "\n{:<32} {:>4}".format(row[0],row[1])
+            return res
+        except sqlite3.Error as er:
+            print(er)
+            print("ERROR: view_collection_by_director")
+
+    def view_collection_by_actor(self, _firstname, _lastname):
+        try:
+            tmp = self._cur.execute("""
+                select Movies.title, Movies.year
+                from Movies
+                inner join MovieActor on Movies.id = MovieActor.movie_id
+                inner join Actors on MovieActor.actor_id = Actors.id
+                where Actors.firstname = ? and Actors.lastname = ?""",[_firstname, _lastname]).fetchall()
+            res = "{:<32} {:>4}".format("Title","Year")
+            for row in tmp:
+                res += "\n{:<32} {:>4}".format(row[0],row[1])
+            return res
+        except sqlite3.Error as er:
+            print(er)
+            print("ERROR: view_collection_by_actor")
     # idk
     def parse_output(self):
         pass 
@@ -252,7 +284,10 @@ def main():
     _fct.update_movie("Random movie name: the presequel",2000,_new_year=2010)
     _fct.update_movie("Random movie name: the presequel",2010,_new_title="adjusted title",_new_studio_name="BBC Films")
     _fct.add_actor("John","Smith","1/1/2000")
-    _fct.view_collection_by_genre("Horror")
-
+    print(_fct.view_collection_by_genre("Horror"))
+    print()
+    print(_fct.view_collection_by_director("Ridley","Scott"))
+    print()
+    print(_fct.view_collection_by_actor("John","Candy"))
 if __name__ == "__main__":
     main()
