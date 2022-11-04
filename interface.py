@@ -254,7 +254,18 @@ class interface:
             print("ERROR: view_collection_by_location")
     
     def view_collection_by_yr_range(self, year_begin, year_end):
-        pass
+        try:
+            tmp = self._cur.execute("""
+                select Movies.title, Movies.year
+                from Movies
+                where year between ? and ?""",[year_begin, year_end]).fetchall()
+            res = "{:<32} {:>4}".format("Title","Year")
+            for row in tmp:
+                res += "\n{:<32} {:>4}".format(row[0],row[1])
+            return res
+        except sqlite3.Error as er:
+            print(er)
+            print("ERROR: view_collection_by_year")
 
     # Displays movies where all actors are still alive
     def view_collection_by_living_actor(self):
