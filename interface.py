@@ -342,15 +342,14 @@ def main():
     _fct.update_movie("Random movie name: the presequel",2000,_new_year=2010)
     _fct.update_movie("Random movie name: the presequel",2010,_new_title="adjusted title",_new_studio_name="BBC Films")
     _fct.add_actor("John","Smith","1/1/2000")
-<<<<<<< HEAD
+
     print(_fct.view_collection_by_genre("Horror"))
     print()
     print(_fct.view_collection_by_director("Ridley","Scott"))
     print()
     print(_fct.view_collection_by_actor("John","Candy"))
-=======
+
     _fct.view_collection_by_genre("Horror")
     print(_fct.view_collection_by_living_actor())
->>>>>>> 91f7564cf45eab9dba0620c433afcf74ac8df0ab
 if __name__ == "__main__":
     main()
