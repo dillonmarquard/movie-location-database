@@ -222,12 +222,15 @@ class interface:
     def view_collection_by_genre(self, _genre):
         try:
             tmp = self._cur.execute("""
-                select * 
+                select Movies.title, Movies.year
                 from Movies
                 inner join MovieGenre on Movies.id = MovieGenre.movie_id
                 inner join Genres on MovieGenre.genre_id = Genres.id
                 where Genres.name = ?""",[_genre]).fetchall()
-            
+            res = "{:<32} {:>4}".format("Title","Year")
+            for row in tmp:
+                res += "\n{:<32} {:>4}".format(row[0],row[1])
+            return res
         except sqlite3.Error as er:
             print(er)
             print("ERROR: view_collection_by_genre")
