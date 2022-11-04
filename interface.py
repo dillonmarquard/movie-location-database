@@ -209,15 +209,73 @@ class interface:
             print("ERROR: update_location")
 
     # VIEWS
-    def view_collection_by_year(self):
+    def view_collection_by_year(self, _year):
+        try:
+            tmp = self._cur.execute("""
+                select Movies.title, Movies.year
+                from Movies
+                where year = ?""",[_year]).fetchall()
+            res = "{:<32} {:>4}".format("Title","Year")
+            for row in tmp:
+                res += "\n{:<32} {:>4}".format(row[0],row[1])
+            return res
+        except sqlite3.Error as er:
+            print(er)
+            print("ERROR: view_collection_by_year")
+        
+    def view_collection_by_studio(self, _studio):
+        try:
+            tmp = self._cur.execute("""
+                select Movies.title, Movies.year
+                from Movies
+                inner join Studios on Movies.studio_id = Studios.id
+                where Studios.name = ?""",[_studio]).fetchall()
+            res = "{:<32} {:>4}".format("Title","Year")
+            for row in tmp:
+                res += "\n{:<32} {:>4}".format(row[0],row[1])
+            return res
+        except sqlite3.Error as er:
+            print(er)
+            print("ERROR: view_collection_by_studio")
+
+    def view_collection_by_location(self, _location):
+        try:
+            tmp = self._cur.execute("""
+                select Movies.title, Movies.year
+                from Movies
+                inner join MovieLocation on Movies.id = MovieLocation.movie_id
+                where Genres.location_id = ?""",[_location]).fetchall()
+            res = "{:<32} {:>4}".format("Title","Year")
+            for row in tmp:
+                res += "\n{:<32} {:>4}".format(row[0],row[1])
+            return res
+        except sqlite3.Error as er:
+            print(er)
+            print("ERROR: view_collection_by_location")
+    
+    def view_collection_by_yr_range(self, year_begin, year_end):
         pass
 
-    def view_collection_by_studio(self):
-        pass
-
-    def view_collection(self):
-        # view collection by (genre, director, actor, year, studio, location)
-        pass
+    def view_collection_by_living_actor(self):
+        try:
+            tmp = self._cur.execute("""
+                select distinct Movies.title, Movies.year
+                from Movies
+                inner join MovieActor on Movies.id = MovieActor.movie_id
+                inner join Actors on MovieActor.actor_id = Actors.id
+                except
+                select Movies.title, Movies.year
+                from Movies
+                inner join MovieActor on Movies.id = MovieActor.movie_id
+                inner join Actors on MovieActor.actor_id = Actors.id
+                where Actors.died is not null""").fetchall()
+            res = "{:<32} {:>4}".format("Title","Year")
+            for row in tmp:
+                res += "\n{:<32} {:>4}".format(row[0],row[1])
+            return res
+        except sqlite3.Error as er:
+            print(er)
+            print("ERROR: view_collection_by_location")
 
     def view_collection_by_genre(self, _genre):
         try:
@@ -284,10 +342,15 @@ def main():
     _fct.update_movie("Random movie name: the presequel",2000,_new_year=2010)
     _fct.update_movie("Random movie name: the presequel",2010,_new_title="adjusted title",_new_studio_name="BBC Films")
     _fct.add_actor("John","Smith","1/1/2000")
+<<<<<<< HEAD
     print(_fct.view_collection_by_genre("Horror"))
     print()
     print(_fct.view_collection_by_director("Ridley","Scott"))
     print()
     print(_fct.view_collection_by_actor("John","Candy"))
+=======
+    _fct.view_collection_by_genre("Horror")
+    print(_fct.view_collection_by_living_actor())
+>>>>>>> 91f7564cf45eab9dba0620c433afcf74ac8df0ab
 if __name__ == "__main__":
     main()
