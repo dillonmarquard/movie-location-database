@@ -189,8 +189,24 @@ class interface:
             print(er)
             print("ERROR: update_movie")
 
-    def update_location(self):
-        pass
+    def update_location(self, _address, new_address=None, new_info=None):
+        try:
+            tmp = self._cur.execute("""select id, address, info from Locations where address = ?""", [_address]).fetchall()
+            if len(tmp) == 0:
+                print("ERROR: Address not in database")
+                return
+            location_id = tmp[0][0]
+            if new_address == None:
+                new_address = _address
+            if new_info == None:
+                new_info = tmp[0][2]
+            else:
+                new_info = self.get_location_id(_address)
+            self._cur.execute("""update Locations set address = ?, info = ? where id = ?""",[new_address, new_info, location_id])
+            self._conn.commit()
+        except sqlite3.Error as er:
+            print(er)
+            print("ERROR: update_location")
 
     # VIEWS
     def view_collection(self):
