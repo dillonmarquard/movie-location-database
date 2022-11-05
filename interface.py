@@ -366,6 +366,24 @@ class interface:
         except sqlite3.Error as er:
             print(er)
             print("ERROR: view_collection_by_actor")
+    
+    def view_actors_by_genre(self,_genre):
+        try:
+            tmp = self._cur.execute("""
+                select distinct Actors.firstname, Actors.lastname
+                from Movies
+                inner join MovieActor on Movies.id = MovieActor.movie_id
+                inner join Actors on MovieActor.actor_id = Actors.id
+                inner join MovieGenre on Movies.id = MovieGenre.movie_id
+                where Genre.name = ?""",[_genre]).fetchall()
+            res = "{:<12} {:<12}".format("First Name","Last Name")
+            for row in tmp:
+                res += "\n{:<12} {:<12}".format(row[0],row[1])
+            return res
+        except sqlite3.Error as er:
+            print(er)
+            print("ERROR: view_actors_by_genre")
+
     # idk
     def parse_output(self):
         pass 
