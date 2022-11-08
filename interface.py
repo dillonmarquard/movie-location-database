@@ -384,6 +384,30 @@ class interface:
             print(er)
             print("ERROR: view_actors_by_genre")
 
+    def view_highest_actor_pair(self):
+        try:
+            tmp = self._cur.execute("""
+                with res as (
+                    select a1.firstname, a1.lastname, a2.firstname, a2.lastname
+                    from (select distinct * from Movies) Movies
+                    inner join MovieActor ma1 on Movies.id = ma1.movie_id
+                    inner join MovieActor ma2 on Movies.id = ma2.movie_id and ma1.actor_id > ma2.actor_id
+                    inner join Actors a1 on ma1.actor_id = a1.id
+                    inner join Actors a2 on ma2.actor_id = a2.id 
+                )
+                select *, count(*) films_together
+                from res
+                group by 1,2,3,4
+                having films_together > 1
+                order by 5 desc""").fetchall()
+            res = "{:<12} {:<12} {:<12} {:<12} {:<16} ".format("First Name","Last Name", "First Name","Last Name", "Movies Together")
+            for row in tmp:
+                res += "\n{:<12} {:<12} {:<12} {:<12} {:<8}".format(row[0],row[1], row[2], row[3], row[4])
+            return res
+        except sqlite3.Error as er:
+            print(er)
+            print("ERROR: view_highest_actor_pair")
+
     # idk
     def parse_output(self):
         pass 
@@ -403,16 +427,21 @@ def main():
     _fct.update_movie("Random movie name: the presequel",2010,_new_title="adjusted title",_new_studio_name="BBC Films")
     _fct.add_actor("John","Smith","1/1/2000")
 
-    #print(_fct.view_collection_by_genre("Horror"))
-    #print()
-    #print(_fct.view_collection_by_director("Ridley","Scott"))
-    #print()
+    print(_fct.view_collection_by_genre("Horror"))
+    print()
+    print(_fct.view_collection_by_director("Ridley","Scott"))
+    print()
     print("View Collection by Horror")
     print(_fct.view_collection_by_genre("Horror"))
-    #print(_fct.view_collection_by_actor("John","Candy"))
+    print()
+    print(_fct.view_collection_by_actor("John","Candy"))
     print()
     _fct.add_moviegenre("Dear John", 2010, "Horror")
     print(_fct.view_collection_by_genre("Horror"))
-    #print(_fct.view_collection_by_living_actor())
+    print()
+    print(_fct.view_collection_by_living_actor())
+    print()
+    print(_fct.view_highest_actor_pair())
+    
 if __name__ == "__main__":
     main()
