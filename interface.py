@@ -239,6 +239,23 @@ class interface:
             print("ERROR: update_location")
 
     # VIEWS
+    def view_movies(self):
+        try:
+            tmp = self._cur.execute("""
+                select Movies.title, Movies.year, Studios.name, Locations.address
+                from Movies
+                inner join MovieLocation on Movies.id = MovieLocation.movie_id
+                inner join Locations on MovieLocation.location_id = Locations.id
+                inner join Studios on Movies.studio_id = Studios.id
+                """).fetchall()
+            res = "{:<32} {:>4} {:<32} {:<32}".format("Title","Year","Studio","Address")
+            for row in tmp:
+                res += "\n{:<32} {:>4} {:<32} {:<32}".format(row[0],row[1],row[2],row[3])
+            return res
+        except sqlite3.Error as er:
+            print(er)
+            print("ERROR: view_collection_by_location")
+
     def view_collection_by_year(self, _year):
         try:
             tmp = self._cur.execute("""
@@ -387,16 +404,11 @@ class interface:
     def view_highest_actor_pair(self):
         try:
             tmp = self._cur.execute("""
-                with res as (
-                    select a1.firstname, a1.lastname, a2.firstname, a2.lastname
-                    from (select distinct * from Movies) Movies
-                    inner join MovieActor ma1 on Movies.id = ma1.movie_id
-                    inner join MovieActor ma2 on Movies.id = ma2.movie_id and ma1.actor_id > ma2.actor_id
-                    inner join Actors a1 on ma1.actor_id = a1.id
-                    inner join Actors a2 on ma2.actor_id = a2.id 
-                )
-                select *, count(*) films_together
-                from res
+                select a1.firstname, a1.lastname, a2.firstname, a2.lastname, count(*) films_together
+                from MovieActor ma1
+                inner join MovieActor ma2 on ma1.movie_id = ma2.movie_id and ma1.actor_id > ma2.actor_id
+                inner join Actors a1 on ma1.actor_id = a1.id
+                inner join Actors a2 on ma2.actor_id = a2.id 
                 group by 1,2,3,4
                 having films_together > 1
                 order by 5 desc""").fetchall()
@@ -442,6 +454,7 @@ def main():
     print(_fct.view_collection_by_living_actor())
     print()
     print(_fct.view_highest_actor_pair())
-    
+    print()
+    print(_fct.view_movies())
 if __name__ == "__main__":
     main()
