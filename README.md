@@ -7,7 +7,7 @@ add_movielocation(title,year,address)
   
 ### Utility Functions
 add_location()  
-add_movielocation() not implemented  
+add_movielocation()
 add_studio()  
   
 Dillon Marquard, Nicholas Larson  
