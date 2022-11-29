@@ -4,6 +4,11 @@
 ### Primary Interface
 add_movie(title, year, studio_name)  
 add_movielocation(title,year,address) 
+
+### Utility Functions
+add_location()  
+add_movielocation()
+add_studio()  
   
 Dillon Marquard, Nicholas Larson  
 https://docs.google.com/presentation/d/19hUQLXp4rdRKnxukaxBNUuls7IGtG0u-hBd_BlVGafo/edit#slide=id.g16884142294_0_0
