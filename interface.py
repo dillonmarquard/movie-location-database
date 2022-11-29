@@ -248,10 +248,12 @@ class interface:
                 inner join Locations on MovieLocation.location_id = Locations.id
                 inner join Studios on Movies.studio_id = Studios.id
                 """).fetchall()
-            res = "{:<32} {:>4} {:<32} {:<32}".format("Title","Year","Studio","Address")
-            for row in tmp:
-                res += "\n{:<32} {:>4} {:<32} {:<32}".format(row[0],row[1],row[2],row[3])
-            return res
+            print(len(tmp))
+            return tmp
+            #res = "{:<32} {:>4} {:<32} {:<32}".format("Title","Year","Studio","Address")
+            #for row in tmp:
+            #    res += "\n{:<32} {:>4} {:<32} {:<32}".format(row[0],row[1],row[2],row[3])
+            #return res
         except sqlite3.Error as er:
             print(er)
             print("ERROR: view_collection_by_location")
