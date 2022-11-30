@@ -7,12 +7,19 @@
     <title>Document</title>
 </head>
 <body>
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/movie/add">Add Movie</a></li>
+    </ul>
+</body>
+<body>
     <table align="left" border="1">
         <tr>
             <th>Title</th>
             <th>Year</th>
             <th>Studio</th>
             <th>Address</th>
+            <th>Remove</th>
         </tr>
         {% for row in data %}
         <tr>
@@ -20,6 +27,14 @@
             <td>{{ row[1] }}</td>
             <td>{{ row[2] }}</td>
             <td>{{ row[3] }}</td>
+            <td align="center">
+                <form action="/data3" method = "POST"> 
+                    <input type = "hidden" name = "movie" value = '{{ row[0] }}' >
+                    <input type = "hidden" name = "year" value = '{{ row[1] }}' >
+                    <input type = "hidden" name = "address" value = '{{ row[3] }}' >
+                    <input type = "submit" value = "X"></p>
+                </form>
+            </td>
         </tr>
         {% endfor %}
     </table>

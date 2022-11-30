@@ -191,7 +191,10 @@ class interface:
         try:
             _movie_id = self.get_movie_id(_title,_year)
             _location_id = self.get_location_id(_address)
-            self._cur.execute("""delete from MovieGenre where movie_id = ? and location_id = ? limit 1""",[_movie_id,_location_id])
+            self._cur.execute("""
+            delete from MovieLocation 
+            where movie_id = ? and location_id = ?
+            """,[_movie_id,_location_id])
             self._conn.commit()
         except sqlite3.Error as er:
             print(er)
@@ -247,8 +250,9 @@ class interface:
                 inner join MovieLocation on Movies.id = MovieLocation.movie_id
                 inner join Locations on MovieLocation.location_id = Locations.id
                 inner join Studios on Movies.studio_id = Studios.id
+                order by 1,2,3,4
                 """).fetchall()
-            print(len(tmp))
+            
             return tmp
             #res = "{:<32} {:>4} {:<32} {:<32}".format("Title","Year","Studio","Address")
             #for row in tmp:
