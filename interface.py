@@ -313,10 +313,10 @@ class interface:
                 select Movies.title, Movies.year
                 from Movies
                 where year between ? and ?""",[year_begin, year_end]).fetchall()
-            res = "{:<32} {:>4}".format("Title","Year")
-            for row in tmp:
-                res += "\n{:<32} {:>4}".format(row[0],row[1])
-            return res
+            #res = "{:<32} {:>4}".format("Title","Year")
+            #for row in tmp:
+            #    res += "\n{:<32} {:>4}".format(row[0],row[1])
+            return tmp
         except sqlite3.Error as er:
             print(er)
             print("ERROR: view_collection_by_year")

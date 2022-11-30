@@ -6,13 +6,16 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
-<header>Movie-Location Database</header>
 <body>
     <ul>
         <li><a href="/">Home</a></li>
-        <li><a href="/movie">View Collection</a></li>
-        <li><a href="/location/edit">Edit Location</a></li>
-        <li><a href="/view">View By</a></li>
     </ul>
+</body>
+<body>
+    <form action="/view_year" method="POST">
+        <p>Start Year<input type = "text" name="StartYear"></p>
+        <p>End Year<input type = "text" name="EndYear"></p>
+        <p><input type = "submit" value = "submit"></p>
+    </form>
 </body>
 </html>

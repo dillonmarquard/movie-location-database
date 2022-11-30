@@ -52,11 +52,21 @@ def edit_location():
     return render_template('edit_location.html')
 
 # TO DO for Nick View Collection by yr_range, studio, location, etc.
-def view_by_yr_range():
-    form_data = request.form
-    data = {x:y  for x,y in form_data.items()}
+@app.route('/view/year/<begin>/<end>')
+def view_by_yr_range(begin,end):
     _fct =  interface()
+    res = _fct.view_collection_by_yr_range(begin,end)
+    return render_template('view_year.html',data = res)
 
+@app.route('/view')
+def view():
+    return render_template('view.html')
+
+@app.post('/view_year')
+def view_year():
+    form_data = request.form
+    data = {x:y for x,y in form_data.items()}
+    return redirect(url_for('view_by_yr_range', begin=data["StartYear"], end=data["EndYear"]))
 
 
 @app.post('/data4')
