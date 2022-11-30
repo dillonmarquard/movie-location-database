@@ -43,7 +43,7 @@ class interface:
             for row in pd.read_csv('data/Studios.csv').itertuples():
                 self._cur.execute("""insert into Studios values (?, ?)""", row[1:] )
             for row in pd.read_csv('data/MovieLocation.csv').itertuples():
-                self._cur.execute("""insert into MovieLocation values (?, ?)""", row[1:] )
+                self._cur.execute("""insert into MovieLocation (movie_id,location_id) values (?, ?)""", row[1:] )
             for row in pd.read_csv('data/MovieGenre.csv').itertuples():
                 self._cur.execute("""insert into MovieGenre values (?, ?)""", row[1:] )
             for row in pd.read_csv('data/MovieDirector.csv').itertuples():
@@ -194,7 +194,8 @@ class interface:
             self._cur.execute("""
             delete from MovieLocation 
             where movie_id = ? and location_id = ?
-            """,[_movie_id,_location_id])
+            and id = (select min(id) from MovieLocation where movie_id = ? and location_id = ?)
+            """,[_movie_id,_location_id,_movie_id,_location_id])
             self._conn.commit()
         except sqlite3.Error as er:
             print(er)
