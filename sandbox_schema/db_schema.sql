@@ -45,6 +45,7 @@ create table MovieGenre (
 );
 
 create table MovieLocation (
+    id INTEGER primary key autoincrement,
     movie_id TEXT not null,
     location_id INTEGER not null
 );
