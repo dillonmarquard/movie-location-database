@@ -269,10 +269,12 @@ class interface:
                 select Movies.title, Movies.year
                 from Movies
                 where year = ?""",[_year]).fetchall()
-            res = "{:<32} {:>4}".format("Title","Year")
-            for row in tmp:
-                res += "\n{:<32} {:>4}".format(row[0],row[1])
-            return res
+            
+            return tmp
+            # res = "{:<32} {:>4}".format("Title","Year")
+            # for row in tmp:
+            #     res += "\n{:<32} {:>4}".format(row[0],row[1])
+            # return res
         except sqlite3.Error as er:
             print(er)
             print("ERROR: view_collection_by_year")
@@ -280,14 +282,16 @@ class interface:
     def view_collection_by_studio(self, _studio):
         try:
             tmp = self._cur.execute("""
-                select Movies.title, Movies.year
+                select Movies.title, Movies.year, Studios.name
                 from Movies
                 inner join Studios on Movies.studio_id = Studios.id
                 where Studios.name = ?""",[_studio]).fetchall()
-            res = "{:<32} {:>4}".format("Title","Year")
-            for row in tmp:
-                res += "\n{:<32} {:>4}".format(row[0],row[1])
-            return res
+            
+            return tmp
+            # res = "{:<32} {:>4}".format("Title","Year")
+            # for row in tmp:
+            #     res += "\n{:<32} {:>4}".format(row[0],row[1])
+            # return res
         except sqlite3.Error as er:
             print(er)
             print("ERROR: view_collection_by_studio")
@@ -299,10 +303,12 @@ class interface:
                 from Movies
                 inner join MovieLocation on Movies.id = MovieLocation.movie_id
                 where Genres.location_id = ?""",[_location]).fetchall()
-            res = "{:<32} {:>4}".format("Title","Year")
-            for row in tmp:
-                res += "\n{:<32} {:>4}".format(row[0],row[1])
-            return res
+            
+            return tmp
+            # res = "{:<32} {:>4}".format("Title","Year")
+            # for row in tmp:
+            #     res += "\n{:<32} {:>4}".format(row[0],row[1])
+            # return res
         except sqlite3.Error as er:
             print(er)
             print("ERROR: view_collection_by_location")
@@ -312,7 +318,7 @@ class interface:
             tmp = self._cur.execute("""
                 select Movies.title, Movies.year
                 from Movies
-                where year between ? and ?""",[year_begin, year_end]).fetchall()
+                where year between ? and ? order by Movies.year ASC""",[year_begin, year_end]).fetchall()
             #res = "{:<32} {:>4}".format("Title","Year")
             #for row in tmp:
             #    res += "\n{:<32} {:>4}".format(row[0],row[1])
@@ -335,10 +341,12 @@ class interface:
                 inner join MovieActor on Movies.id = MovieActor.movie_id
                 inner join Actors on MovieActor.actor_id = Actors.id
                 where Actors.died is not null""").fetchall()
-            res = "{:<32} {:>4}".format("Title","Year")
-            for row in tmp:
-                res += "\n{:<32} {:>4}".format(row[0],row[1])
-            return res
+            
+            return tmp
+            # res = "{:<32} {:>4}".format("Title","Year")
+            # for row in tmp:
+            #     res += "\n{:<32} {:>4}".format(row[0],row[1])
+            # return res
         except sqlite3.Error as er:
             print(er)
             print("ERROR: view_collection_by_location")
@@ -351,10 +359,12 @@ class interface:
                 inner join MovieGenre on Movies.id = MovieGenre.movie_id
                 inner join Genres on MovieGenre.genre_id = Genres.id
                 where Genres.name = ?""",[_genre]).fetchall()
-            res = "{:<32} {:>4}".format("Title","Year")
-            for row in tmp:
-                res += "\n{:<32} {:>4}".format(row[0],row[1])
-            return res
+
+            return tmp
+            # res = "{:<32} {:>4}".format("Title","Year")
+            # for row in tmp:
+            #     res += "\n{:<32} {:>4}".format(row[0],row[1])
+            # return res
         except sqlite3.Error as er:
             print(er)
             print("ERROR: view_collection_by_genre")
@@ -367,10 +377,12 @@ class interface:
                 inner join MovieDirector on Movies.id = MovieDirector.movie_id
                 inner join Directors on MovieDirector.director_id = Directors.id
                 where Directors.firstname = ? and Directors.lastname = ?""",[_firstname, _lastname]).fetchall()
-            res = "{:<32} {:>4}".format("Title","Year")
-            for row in tmp:
-                res += "\n{:<32} {:>4}".format(row[0],row[1])
-            return res
+            
+            return tmp
+            # res = "{:<32} {:>4}".format("Title","Year")
+            # for row in tmp:
+            #     res += "\n{:<32} {:>4}".format(row[0],row[1])
+            # return res
         except sqlite3.Error as er:
             print(er)
             print("ERROR: view_collection_by_director")
@@ -383,10 +395,12 @@ class interface:
                 inner join MovieActor on Movies.id = MovieActor.movie_id
                 inner join Actors on MovieActor.actor_id = Actors.id
                 where Actors.firstname = ? and Actors.lastname = ?""",[_firstname, _lastname]).fetchall()
-            res = "{:<32} {:>4}".format("Title","Year")
-            for row in tmp:
-                res += "\n{:<32} {:>4}".format(row[0],row[1])
-            return res
+            
+            return tmp
+            # res = "{:<32} {:>4}".format("Title","Year")
+            # for row in tmp:
+            #     res += "\n{:<32} {:>4}".format(row[0],row[1])
+            # return res
         except sqlite3.Error as er:
             print(er)
             print("ERROR: view_collection_by_actor")
@@ -400,10 +414,12 @@ class interface:
                 inner join Actors on MovieActor.actor_id = Actors.id
                 inner join MovieGenre on Movies.id = MovieGenre.movie_id
                 where Genre.name = ?""",[_genre]).fetchall()
-            res = "{:<12} {:<12}".format("First Name","Last Name")
-            for row in tmp:
-                res += "\n{:<12} {:<12}".format(row[0],row[1])
-            return res
+            
+            return tmp
+            # res = "{:<12} {:<12}".format("First Name","Last Name")
+            # for row in tmp:
+            #     res += "\n{:<12} {:<12}".format(row[0],row[1])
+            # return res
         except sqlite3.Error as er:
             print(er)
             print("ERROR: view_actors_by_genre")
@@ -419,10 +435,12 @@ class interface:
                 group by 1,2,3,4
                 having films_together > 1
                 order by 5 desc""").fetchall()
-            res = "{:<12} {:<12} {:<12} {:<12} {:<16} ".format("First Name","Last Name", "First Name","Last Name", "Movies Together")
-            for row in tmp:
-                res += "\n{:<12} {:<12} {:<12} {:<12} {:<8}".format(row[0],row[1], row[2], row[3], row[4])
-            return res
+            
+            return tmp
+            # res = "{:<12} {:<12} {:<12} {:<12} {:<16} ".format("First Name","Last Name", "First Name","Last Name", "Movies Together")
+            # for row in tmp:
+            #     res += "\n{:<12} {:<12} {:<12} {:<12} {:<8}".format(row[0],row[1], row[2], row[3], row[4])
+            # return res
         except sqlite3.Error as er:
             print(er)
             print("ERROR: view_highest_actor_pair")

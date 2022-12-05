@@ -58,6 +58,18 @@ def view_by_yr_range(begin,end):
     res = _fct.view_collection_by_yr_range(begin,end)
     return render_template('view_year.html',data = res)
 
+@app.route('/view/studio/<StudioName>')
+def view_by_studio_name(StudioName):
+    _fct =  interface()
+    res = _fct.view_collection_by_studio(StudioName)
+    return render_template('view_by_studio_name.html',data = res)
+
+@app.post('/view_by_studio')
+def view_studio_name():
+    form_data = request.form
+    data = {x:y for x,y in form_data.items()}
+    return redirect(url_for('view_by_studio_name', StudioName=data["StudioName"]))
+
 @app.route('/view')
 def view():
     return render_template('view.html')
