@@ -12,6 +12,7 @@
     </ul>
 </body>
 <body>
+    <p>Filter by Year Range</p>
     <form action="/view_year" method="POST">
         <p>Start Year <input type = "text" name="StartYear"></p>
         <p>End Year <input type = "text" name="EndYear"></p>
@@ -25,12 +26,12 @@
 </body>
 <body>
     <form action ="/view_by_location" method="POST">
-        <p>Filter by Location Name <input type = "text" name="LocationName"></p>
+        <p>Filter by Address <input type = "text" name="Address"></p>
         <p><input type = "submit" value = "submit"></p>
     </form>
 </body>
 <body>
-    <form action ="/view_living_actor" method="POST">
+    <form action ="/view/living_actor" method="GET">
         <p>Filter by Living Actor </p>
         <p><input type = "submit" value = "submit"></p>
     </form>

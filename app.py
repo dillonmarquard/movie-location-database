@@ -70,6 +70,31 @@ def view_studio_name():
     data = {x:y for x,y in form_data.items()}
     return redirect(url_for('view_by_studio_name', StudioName=data["StudioName"]))
 
+#Views for Living Actor
+@app.route('/view/living_actor')
+def view_by_living_actor():
+    _fct =  interface()
+    res = _fct.view_collection_by_living_actor()
+    return render_template('view_by_living_actor.html',data = res)
+
+
+# Views for Location Name
+@app.route('/view/location/<LocationName>')
+def view_by_location_name(LocationName):
+    _fct =  interface()
+    res = _fct.view_collection_by_location(LocationName)
+    return render_template('view_by_address.html',data = res)
+
+@app.post('/view_by_location')
+def view_location():
+    form_data = request.form
+    data = {x:y for x,y in form_data.items()}
+    return redirect(url_for('view_by_location_name', LocationName=data["Address"]))
+
+@app.route('/view/actors')
+def view_actors():
+    return render_template('actors.html')
+
 @app.route('/view')
 def view():
     return render_template('view.html')

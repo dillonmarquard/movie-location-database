@@ -298,11 +298,12 @@ class interface:
 
     def view_collection_by_location(self, _location):
         try:
+            location_id = self.get_location_id(_location)
             tmp = self._cur.execute("""
                 select Movies.title, Movies.year
                 from Movies
                 inner join MovieLocation on Movies.id = MovieLocation.movie_id
-                where Genres.location_id = ?""",[_location]).fetchall()
+                where MovieLocation.location_id = ?""",[location_id]).fetchall()
             
             return tmp
             # res = "{:<32} {:>4}".format("Title","Year")
@@ -340,7 +341,8 @@ class interface:
                 from Movies
                 inner join MovieActor on Movies.id = MovieActor.movie_id
                 inner join Actors on MovieActor.actor_id = Actors.id
-                where Actors.died is not null""").fetchall()
+                where Actors.died is not null 
+                order by Movies.year asc""").fetchall()
             
             return tmp
             # res = "{:<32} {:>4}".format("Title","Year")
