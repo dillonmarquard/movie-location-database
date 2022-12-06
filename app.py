@@ -91,9 +91,19 @@ def view_location():
     data = {x:y for x,y in form_data.items()}
     return redirect(url_for('view_by_location_name', LocationName=data["Address"]))
 
-@app.route('/view/actors')
+# Views for Actors
+@app.route('/view/actors/<Genre>')
+def view_by_actors(Genre):
+    _fct =  interface()
+    res = _fct.view_actors_by_genre(Genre)
+    return render_template('actors.html',data = res)
+
+@app.post('/view_by_actors')
 def view_actors():
-    return render_template('actors.html')
+    form_data = request.form
+    data = {x:y for x,y in form_data.items()}
+    return redirect(url_for('view_by_actors', Genre=data["Genre"]))
+
 
 @app.route('/view')
 def view():

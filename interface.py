@@ -355,12 +355,13 @@ class interface:
 
     def view_collection_by_genre(self, _genre):
         try:
+            genre_id = self.get_genre_id(_genre)
+            print(genre_id)
             tmp = self._cur.execute("""
                 select Movies.title, Movies.year
                 from Movies
                 inner join MovieGenre on Movies.id = MovieGenre.movie_id
-                inner join Genres on MovieGenre.genre_id = Genres.id
-                where Genres.name = ?""",[_genre]).fetchall()
+                where MovieGenre.genre_id = ?""",[genre_id]).fetchall()
 
             return tmp
             # res = "{:<32} {:>4}".format("Title","Year")
@@ -409,13 +410,15 @@ class interface:
     
     def view_actors_by_genre(self,_genre):
         try:
+            genre_id = self.get_genre_id(_genre)
             tmp = self._cur.execute("""
                 select distinct Actors.firstname, Actors.lastname
                 from Movies
                 inner join MovieActor on Movies.id = MovieActor.movie_id
                 inner join Actors on MovieActor.actor_id = Actors.id
                 inner join MovieGenre on Movies.id = MovieGenre.movie_id
-                where Genre.name = ?""",[_genre]).fetchall()
+                inner join Genres on Genres.id= MovieGenre.genre_id
+                where Genres.id = ?""",[genre_id]).fetchall()
             
             return tmp
             # res = "{:<12} {:<12}".format("First Name","Last Name")
