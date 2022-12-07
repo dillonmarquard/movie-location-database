@@ -77,6 +77,11 @@ def view_by_living_actor():
     res = _fct.view_collection_by_living_actor()
     return render_template('view_by_living_actor.html',data = res)
 
+@app.route('/view/highest_actor_pair')
+def view_by_highest_actors():
+    _fct =  interface()
+    res = _fct.view_highest_actor_pair()
+    return render_template('highest_actor.html',data = res)
 
 # Views for Location Name
 @app.route('/view/location/<LocationName>')
