@@ -201,6 +201,30 @@ class interface:
             print(er)
             print("ERROR: delete_movielocation")
     
+    def delete_movie(self, _title, _year):
+        try:
+            _movie_id = self.get_movie_id(_title,_year)
+            self._cur.execute("""
+            delete from Movies
+            where id = ?
+            """,[_movie_id])
+            self._cur.execute("""
+            delete from MovieLocation
+            where movie_id = ?
+            """,[_movie_id])
+            self._cur.execute("""
+            delete from MovieGenre
+            where movie_id = ?
+            """,[_movie_id])
+            self._cur.execute("""
+            delete from MovieActor
+            where movie_id = ?
+            """,[_movie_id])
+            self._conn.commit()
+        except sqlite3.Error as er:
+            print(er)
+            print("ERROR: delete_movie")
+
     # UPDATE
     def update_movie(self,_title,_year,_new_title=None,_new_year=None,_new_studio_name=None):
         try:
@@ -262,6 +286,21 @@ class interface:
         except sqlite3.Error as er:
             print(er)
             print("ERROR: view_collection_by_location")
+
+    def view_movies_table(self):
+        try:
+            tmp = self._cur.execute("""
+                select Movies.title, Movies.year, Studios.name
+                from Movies
+                left join Studios on Movies.studio_id = Studios.id
+                order by 1,2,3
+                """).fetchall()
+            
+            return tmp
+
+        except sqlite3.Error as er:
+            print(er)
+            print("ERROR: view_movies_table")
 
     def view_collection_by_year(self, _year):
         try:

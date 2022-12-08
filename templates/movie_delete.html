@@ -9,8 +9,7 @@
 <body>
     <ul>
         <li><a href="/">Home</a></li>
-        <li><a href="/movie/add">Add Movie</a></li>
-        <li><a href="/movie/delete">Remove Movie</a></li>
+        <li><a href="/movie">View Collection</a></li>
     </ul>
 </body>
 <body>
@@ -19,7 +18,6 @@
             <th>Title</th>
             <th>Year</th>
             <th>Studio</th>
-            <th>Address</th>
             <th>Remove</th>
         </tr>
         {% for row in data %}
@@ -27,12 +25,10 @@
             <td>{{ row[0] }}</td> 
             <td>{{ row[1] }}</td>
             <td>{{ row[2] }}</td>
-            <td>{{ row[3] }}</td>
             <td align="center">
-                <form action="/data3" method = "POST"> 
+                <form action="/data10" method = "POST"> 
                     <input type = "hidden" name = "movie" value = '{{ row[0] }}' >
                     <input type = "hidden" name = "year" value = '{{ row[1] }}' >
-                    <input type = "hidden" name = "address" value = '{{ row[3] }}' >
                     <input type = "submit" value = "X"></p>
                 </form>
             </td>

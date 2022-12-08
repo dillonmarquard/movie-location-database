@@ -19,6 +19,21 @@ def movie():
 def movie_add():
     return render_template('movie_add.html')
 
+@app.route('/movie/delete')
+def movie_delete():
+    _fct = interface()
+    res = _fct.view_movies_table()
+    _fct._cur.close()
+    return render_template('movie_delete.html',data = res)
+
+@app.post('/data10')
+def data10():
+    form_data = request.form
+    data = {x:y for x,y in form_data.items()}
+    _fct = interface()
+    _fct.delete_movie(data['movie'],int(data['year']))
+    return redirect(url_for('movie_delete'))
+
 @app.post('/data1')
 def data1():
     form_data = request.form
